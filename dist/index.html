@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>土豆画板</title>
+    <link rel="stylesheet" href="/style.e308ff8e.css">
+    <script src="/main.1f19ae8e.js"></script>
+<script src="/style.e308ff8e.js"></script></head>
+
+<body>
+    <canvas id="canvas" width="375" height="667"></canvas>
+    <script>var canvas = document.getElementById('canvas');
+canvas.width = document.documentElement.clientWidth;
+canvas.height = document.documentElement.clientHeight;
+var ctx = canvas.getContext('2d');
+ctx.fillStyle = 'pink';
+ctx.strokeStyle = 'pink';
+ctx.lineWidth = 10;
+ctx.lineCap = 'round';
+var last;
+var painting = false;
+var isTouchDevice = ('ontouchstart' in document.documentElement);
+console.log(isTouchDevice);
+
+if (isTouchDevice) {
+  canvas.ontouchstart = function (e) {
+    var x = e.touches[0].clientX;
+    var y = e.touches[0].clientY;
+    last = [x, y];
+  };
+
+  canvas.ontouchmove = function (e) {
+    var x = e.touches[0].clientX;
+    var y = e.touches[0].clientY;
+    drawLine(last[0], last[1], x, y); // 绘制
+
+    last = [x, y];
+  };
+} else {
+  canvas.onmousemove = function (e) {
+    if (!painting) return;
+    drawLine(last[0], last[1], e.clientX, e.clientY); // 绘制
+
+    last = [e.clientX, e.clientY];
+  };
+
+  canvas.onmousedown = function (e) {
+    painting = true;
+    last = [e.clientX, e.clientY];
+  };
+
+  canvas.onmouseup = function () {
+    painting = false;
+  };
+}
+
+function drawLine(x1, y1, x2, y2) {
+  ctx.beginPath();
+  ctx.moveTo(x1, y1);
+  ctx.lineTo(x2, y2);
+  ctx.stroke();
+}</script>
+</body>
+
+</html>
